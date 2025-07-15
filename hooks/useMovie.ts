@@ -12,6 +12,7 @@ const produceApiUrl = (
   const originUrl = new URL(`${configs.API_BASE_URL}${apiPath}`);
   originUrl.searchParams.append("api_key", configs.API_KEY);
   if (params) {
+    if (Object.keys(params).length === 0) return null;
     Object.entries(params).forEach(([key, value]) => {
       originUrl.searchParams.append(key, value.toString());
     });
@@ -20,7 +21,7 @@ const produceApiUrl = (
 };
 
 export const useMovieList = (page = 1) => {
-  const { data, error } = useSWR<Movie[]>(
+  const { data, error, isLoading } = useSWR<Movie[]>(
     produceApiUrl(apiPaths.MOVIE_POPULAR, { page }),
     fetcher
   );
@@ -28,14 +29,14 @@ export const useMovieList = (page = 1) => {
 
   if (error) {
     console.error("Error fetching movie list:", error);
-    return { data: [], error };
+    return { data: [], error, isLoading };
   }
 
-  return { data: transformData, error };
+  return { data: transformData, error, isLoading };
 };
 
 export const useMovieDetail = (id: number) => {
-  const { data, error } = useSWR<MovieDetails>(
+  const { data, error, isLoading } = useSWR<MovieDetails>(
     produceApiUrl(`${apiPaths.MOVIE}/${id}`),
     fetcher
   );
@@ -43,14 +44,14 @@ export const useMovieDetail = (id: number) => {
 
   if (error) {
     console.error("Error fetching movie detail:", error);
-    return { data: null, error };
+    return { data: null, error, isLoading };
   }
 
-  return { data: transformData, error };
+  return { data: transformData, error, isLoading };
 };
 
 export const useSearchMovie = (query: string, page = 1) => {
-  const { data, error } = useSWR<Movie[]>(
+  const { data, error, isLoading } = useSWR<Movie[]>(
     produceApiUrl(apiPaths.MOVIE_SEARCH, { query: encodeURIComponent(query), page }),
     fetcher
   );
@@ -58,8 +59,8 @@ export const useSearchMovie = (query: string, page = 1) => {
 
   if (error) {
     console.error("Error searching movie:", error);
-    return { data: [], error };
+    return { data: [], error, isLoading };
   }
 
-  return { data: transformData, error };
+  return { data: transformData, error, isLoading };
 };
