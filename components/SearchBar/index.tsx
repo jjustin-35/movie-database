@@ -24,7 +24,7 @@ const SearchBar = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative m-4">
+    <form onSubmit={handleSubmit} className="relative mt-4 mb-8">
       <div className="relative">
         <input
           type="text"

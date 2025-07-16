@@ -5,17 +5,20 @@ import { Heart, HeartOff, Star, Calendar } from "lucide-react";
 import { Movie } from "@/constants/type";
 import { getImageUrl } from "@/helpers/getUlrl";
 import { formatDate } from "@/helpers/formatDate";
-import useWatchList from "@/hooks/useWatchList";
 
 const MovieCard = ({
   movie,
+  isInWatchlist,
   onClick,
+  addToWatchList,
+  removeFromWatchList,
 }: {
   movie: Movie;
+  isInWatchlist: boolean;
+  addToWatchList: (movie: Movie) => void;
+  removeFromWatchList: (movieId: number) => void;
   onClick?: (movie: Movie) => void;
 }) => {
-  const { watchList, addToWatchList, removeFromWatchList } = useWatchList();
-  const isInWatchlist = watchList.some((item) => item.id === movie.id);
   const imageUrl = getImageUrl(movie.poster_path);
   const releaseDate = formatDate(movie.release_date);
 

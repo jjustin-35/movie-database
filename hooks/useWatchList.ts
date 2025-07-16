@@ -11,16 +11,19 @@ const useWatchList = () => {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("watchList", JSON.stringify(watchList));
-  }, [watchList]);
+  const updateWatchList = (newWatchList: Movie[]) => {
+    setWatchList(newWatchList);
+    localStorage.setItem("watchList", JSON.stringify(newWatchList));
+  };
 
   const addToWatchList = (movie: Movie) => {
-    setWatchList((prev) => [...prev, movie]);
+    const newWatchList = [...watchList, movie];
+    updateWatchList(newWatchList);
   };
 
   const removeFromWatchList = (movieId: number) => {
-    setWatchList((prev) => prev.filter((movie) => movie.id !== movieId));
+    const newWatchList = watchList.filter((movie) => movie.id !== movieId);
+    updateWatchList(newWatchList);
   };
 
   return {
