@@ -1,8 +1,9 @@
 import useSWR from "swr";
 import { useMemo } from "react";
-import apiPaths from "../constants/apiPath";
-import fetcher from "../helpers/fetcher";
 import { Movie, MovieDetails } from "@/constants/type";
+import apiPaths from "../constants/apiPath";
+import { useToast } from "@/context/toastContext";
+import fetcher from "../helpers/fetcher";
 import { transformMovie, transformMovieDetail } from "../helpers/transform";
 import { getApiUrl } from "@/helpers/getUrl";
 
@@ -14,7 +15,7 @@ interface MovieListResponse {
 }
 
 export const useMovieList = (page = 1, query: string | null = null) => {
-  console.log(page, query);
+  const { openToast } = useToast();
   const url = (() => {
     if (query) {
       return getApiUrl(apiPaths.MOVIE_SEARCH, {
@@ -35,13 +36,23 @@ export const useMovieList = (page = 1, query: string | null = null) => {
   }, [data, error]);
 
   if (error) {
-    console.error("Error fetching movie list:", error);
+    const message = (() => {
+      if (error.message) return error.message;
+      if (query) return "Error searching movie";
+      return "Error fetching movie list";
+    })();
+
+    openToast({
+      message,
+      type: "error",
+    });
   }
 
   return { data: transformData, error, isLoading };
 };
 
 export const useMovieDetail = (id: number) => {
+  const { openToast } = useToast();
   const { data, error, isLoading } = useSWR<MovieDetails>(
     getApiUrl(`${apiPaths.MOVIE}/${id}`),
     fetcher
@@ -49,7 +60,11 @@ export const useMovieDetail = (id: number) => {
   const transformData = transformMovieDetail(data);
 
   if (error) {
-    console.error("Error fetching movie detail:", error);
+    const message = error.message || "Error fetching movie detail";
+    openToast({
+      message,
+      type: "error",
+    });
     return { data: null, error, isLoading };
   }
 

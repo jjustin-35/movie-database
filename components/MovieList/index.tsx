@@ -2,9 +2,9 @@
 
 import { Movie } from "@/constants/type";
 import useObserver from "@/hooks/useObserver";
-import useWatchList from "@/hooks/useWatchList";
-import MovieCard from "../MovieCard";
+import { useWatchList } from "@/context/watchListContext";
 import LoadingSpinner from "../Loading/LoadingSpinner";
+import ListComponent from "./listComponent";
 
 const observerOptions = {
   root: null,
@@ -41,20 +41,12 @@ const MovieList = ({
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        {movieList.map((movie, idx) => {
-          const isInWatchlist = watchList.some((item) => item.id === movie.id);
-          return (
-            <MovieCard
-              movie={movie}
-              key={`${movie.id}-${idx}`}
-              isInWatchlist={isInWatchlist}
-              addToWatchList={addToWatchList}
-              removeFromWatchList={removeFromWatchList}
-            />
-          );
-        })}
-      </div>
+      <ListComponent
+        movieList={movieList}
+        watchList={watchList}
+        addToWatchList={addToWatchList}
+        removeFromWatchList={removeFromWatchList}
+      />
 
       <div ref={loadingRef} className="flex justify-center py-8">
         {isLoading && <LoadingSpinner size={{ width: 40, height: 40 }} />}
