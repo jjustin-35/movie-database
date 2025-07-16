@@ -1,18 +1,22 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useRef } from "react";
 
-const useObserver = <T extends HTMLElement>(
+const useObserver = (
   callback: (entries: IntersectionObserverEntry[]) => void,
-  options: IntersectionObserverInit = {},
+  options: IntersectionObserverInit
 ) => {
-  const targetRef = useRef<T>(null);
+  const observer = useRef(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(targetRef.current);
-    return () => observer.disconnect();
+  return useCallback((node: HTMLElement) => {
+    if (!node) {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+      return;
+    }
+
+    observer.current = new window.IntersectionObserver(callback, options);
+    observer.current.observe(node);
   }, [callback, options]);
-
-  return targetRef;
 };
 
 export default useObserver;

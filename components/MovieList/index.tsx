@@ -1,27 +1,35 @@
-'use client';
+"use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { Movie } from "@/constants/type";
 import useObserver from "@/hooks/useObserver";
-import { useMovieList } from "@/hooks/useMovie";
 import MovieCard from "../MovieCard";
 import LoadingSpinner from "../Loading/LoadingSpinner";
 
-const MovieList = () => {
-  const [page, setPage] = useState(1);
-  const loadingRef = useObserver<HTMLDivElement>(
-    () => {
-      setPage((prev) => prev + 1);
-    },
-    {
-      root: null,
-      rootMargin: "200px",
-      threshold: 0.1,
-    }
-  );
-  const { data: movieList, error, isLoading } = useMovieList(page);
+const observerOptions = {
+  root: null,
+  rootMargin: "100px",
+  threshold: 0.3,
+};
 
-  if (error || (movieList.length === 0 && !isLoading)) {
+const MovieList = ({
+  movieList,
+  isLoading,
+  onChangePage,
+}: {
+  movieList: Movie[];
+  isLoading: boolean;
+  onChangePage: (page: number | ((prev: number) => number)) => void;
+}) => {
+  const onLoadMore = (entries: IntersectionObserverEntry[]) => {
+    console.log(entries, isLoading);
+    if (entries[0].isIntersecting && !isLoading) {
+      onChangePage((prev) => prev + 1);
+    }
+  };
+
+  const loadingRef = useObserver(onLoadMore, observerOptions);
+
+  if (!movieList?.length && !isLoading) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-400 text-xl">沒有找到相關電影</p>
@@ -32,15 +40,13 @@ const MovieList = () => {
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        {movieList.map((movie) => (
-          <Link key={movie.id} href={`/movie/${movie.id}`}>
-            <MovieCard movie={movie} />
-          </Link>
+        {movieList.map((movie, idx) => (
+          <MovieCard movie={movie} key={`${movie.id}-${idx}`} />
         ))}
       </div>
 
       <div ref={loadingRef} className="flex justify-center py-8">
-        {isLoading && <LoadingSpinner />}
+        {isLoading && <LoadingSpinner size={{ width: 40, height: 40 }} />}
       </div>
     </div>
   );

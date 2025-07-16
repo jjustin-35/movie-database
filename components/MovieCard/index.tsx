@@ -31,12 +31,12 @@ const MovieCard = ({
       className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer group"
       onClick={() => onClick(movie)}
     >
-      <div className="relative">
+      <div className="relative w-full h-72">
         <Image
           src={imageUrl}
           alt={movie.title}
           fill
-          className="w-full h-72 object-cover"
+          className="object-cover"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />

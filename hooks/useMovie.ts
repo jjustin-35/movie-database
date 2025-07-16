@@ -1,35 +1,41 @@
 import useSWR from "swr";
-import configs from "../config";
+import { useMemo } from "react";
 import apiPaths from "../constants/apiPath";
 import fetcher from "../helpers/fetcher";
 import { Movie, MovieDetails } from "@/constants/type";
 import { transformMovie, transformMovieDetail } from "../helpers/transform";
+import { getApiUrl } from "@/helpers/getApiUrl";
 
-const produceApiUrl = (
-  apiPath: string,
-  params?: Record<string, string | number>
-) => {
-  const originUrl = new URL(`${configs.API_BASE_URL}${apiPath}`);
-  originUrl.searchParams.append("api_key", configs.API_KEY);
-  if (params) {
-    if (Object.keys(params).length === 0) return null;
-    Object.entries(params).forEach(([key, value]) => {
-      originUrl.searchParams.append(key, value.toString());
-    });
-  }
-  return originUrl.toString();
-};
+interface MovieListResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
 
-export const useMovieList = (page = 1) => {
-  const { data, error, isLoading } = useSWR<Movie[]>(
-    produceApiUrl(apiPaths.MOVIE_POPULAR, { page }),
-    fetcher
-  );
-  const transformData = data?.map((item) => transformMovie(item));
+export const useMovieList = (page = 1, query: string | null = null) => {
+  console.log(page, query);
+  const url = (() => {
+    if (query) {
+      return getApiUrl(apiPaths.MOVIE_SEARCH, {
+        query: encodeURIComponent(query),
+        page,
+      });
+    }
+    return getApiUrl(apiPaths.MOVIE_POPULAR, { page });
+  })();
+
+  const { data, error, isLoading } = useSWR<MovieListResponse>(url, fetcher);
+
+  const transformData = useMemo(() => {
+    if (error || !data) {
+      return [];
+    }
+    return data.results?.map((item) => transformMovie(item)) || [];
+  }, [data, error]);
 
   if (error) {
     console.error("Error fetching movie list:", error);
-    return { data: [], error, isLoading };
   }
 
   return { data: transformData, error, isLoading };
@@ -37,7 +43,7 @@ export const useMovieList = (page = 1) => {
 
 export const useMovieDetail = (id: number) => {
   const { data, error, isLoading } = useSWR<MovieDetails>(
-    produceApiUrl(`${apiPaths.MOVIE}/${id}`),
+    getApiUrl(`${apiPaths.MOVIE}/${id}`),
     fetcher
   );
   const transformData = transformMovieDetail(data);
@@ -45,21 +51,6 @@ export const useMovieDetail = (id: number) => {
   if (error) {
     console.error("Error fetching movie detail:", error);
     return { data: null, error, isLoading };
-  }
-
-  return { data: transformData, error, isLoading };
-};
-
-export const useSearchMovie = (query: string, page = 1) => {
-  const { data, error, isLoading } = useSWR<Movie[]>(
-    produceApiUrl(apiPaths.MOVIE_SEARCH, { query: encodeURIComponent(query), page }),
-    fetcher
-  );
-  const transformData = data?.map((item) => transformMovie(item));
-
-  if (error) {
-    console.error("Error searching movie:", error);
-    return { data: [], error, isLoading };
   }
 
   return { data: transformData, error, isLoading };
