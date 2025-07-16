@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Heart, HeartOff, Star, Calendar } from "lucide-react";
 import { Movie } from "@/constants/type";
-import { getImageUrl } from "@/helpers/getUlrl";
+import { getImageUrl } from "@/helpers/getUrl";
 import { formatDate } from "@/helpers/formatDate";
 
 const MovieCard = ({

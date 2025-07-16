@@ -4,7 +4,7 @@ import apiPaths from "../constants/apiPath";
 import fetcher from "../helpers/fetcher";
 import { Movie, MovieDetails } from "@/constants/type";
 import { transformMovie, transformMovieDetail } from "../helpers/transform";
-import { getApiUrl } from "@/helpers/getApiUrl";
+import { getApiUrl } from "@/helpers/getUrl";
 
 interface MovieListResponse {
   page: number;
