@@ -51,3 +51,36 @@ export interface MovieDetails extends Movie {
   homepage: string;
   imdb_id: string;
 }
+
+interface Cast {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+
+interface Crew {
+  id: number;
+  name: string;
+  job: string;
+}
+
+export interface Credits {
+  cast: Cast[];
+  crew: Crew[];
+}
+export interface Video {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+  published_at: string;
+}
+
+export interface AllMovieDetail {
+  movie: MovieDetails;
+  credits: Credits;
+  videos: Video[];
+}

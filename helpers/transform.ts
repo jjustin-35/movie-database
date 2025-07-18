@@ -1,4 +1,4 @@
-import { Movie, MovieDetails } from "../constants/type";
+import { AllMovieDetail, Movie } from "../constants/type";
 
 export const transformMovie = (data: Movie): Movie => {
   const newMovie = {
@@ -20,27 +20,36 @@ export const transformMovie = (data: Movie): Movie => {
   return newMovie;
 };
 
-export const transformMovieDetail = (data: MovieDetails): MovieDetails => {
-  const baseMovie = transformMovie(data);
+export const transformMovieDetail = (data: AllMovieDetail): AllMovieDetail => {
+  const { movie, credits, videos } = data;
+  const baseMovie = transformMovie(movie);
   const newMovieDetail = {
-    ...baseMovie,
-    runtime: data.runtime || 0,
-    genres: Array.isArray(data.genres) ? data.genres : [],
-    production_companies: Array.isArray(data.production_companies)
-      ? data.production_companies
+    movie: {
+      ...baseMovie,
+    runtime: movie.runtime || 0,
+    genres: Array.isArray(movie.genres) ? movie.genres : [],
+    production_companies: Array.isArray(movie.production_companies)
+      ? movie.production_companies
       : [],
-    production_countries: Array.isArray(data.production_countries)
-      ? data.production_countries
+    production_countries: Array.isArray(movie.production_countries)
+      ? movie.production_countries
       : [],
-    spoken_languages: Array.isArray(data.spoken_languages)
-      ? data.spoken_languages
+    spoken_languages: Array.isArray(movie.spoken_languages)
+      ? movie.spoken_languages
       : [],
-    status: data.status || "Unknown",
-    tagline: data.tagline || "",
-    budget: data.budget || 0,
-    revenue: data.revenue || 0,
-    homepage: data.homepage || "",
-    imdb_id: data.imdb_id || "",
+    status: movie.status || "Unknown",
+    tagline: movie.tagline || "",
+    budget: movie.budget || 0,
+    revenue: movie.revenue || 0,
+    homepage: movie.homepage || "",
+    imdb_id: movie.imdb_id || "",
+    },
+    credits: {
+      cast: Array.isArray(credits.cast) ? credits.cast : [],
+      crew: Array.isArray(credits.crew) ? credits.crew : [],
+    },
+    videos: Array.isArray(videos) ? videos : [],
   };
+
   return newMovieDetail;
 };

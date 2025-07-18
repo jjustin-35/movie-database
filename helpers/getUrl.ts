@@ -11,10 +11,12 @@ export const getYoutubeUrl = (id: string) => {
 
 export const getApiUrl = (
   apiPath: string,
-  params?: Record<string, string | number>
+  params?: Record<string, string | number>,
+  language: string = "zh-TW"
 ) => {
   const originUrl = new URL(`${configs.API_BASE_URL}${apiPath}`);
   originUrl.searchParams.append("api_key", configs.API_KEY);
+  originUrl.searchParams.append("language", language);
   if (params) {
     if (Object.keys(params).length === 0) return null;
     Object.entries(params).forEach(([key, value]) => {
