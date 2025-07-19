@@ -4,7 +4,7 @@ import { Movie } from "@/constants/type";
 import useObserver from "@/hooks/useObserver";
 import { useWatchList } from "@/context/watchListContext";
 import LoadingSpinner from "../Loading/spinner";
-import ListComponent from "../MovieList";
+import MovieList from "../MovieList";
 
 const observerOptions = {
   root: null,
@@ -12,7 +12,7 @@ const observerOptions = {
   threshold: 0.3,
 };
 
-const MovieList = ({
+const Movies = ({
   movieList,
   isLoading,
   onChangePage,
@@ -41,7 +41,7 @@ const MovieList = ({
 
   return (
     <div>
-      <ListComponent
+      <MovieList
         movieList={movieList}
         watchList={watchList}
         isLoading={isLoading}
@@ -56,4 +56,4 @@ const MovieList = ({
   );
 };
 
-export default MovieList;
+export default Movies;

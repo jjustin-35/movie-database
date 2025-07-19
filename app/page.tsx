@@ -29,7 +29,7 @@ export default function Home() {
       <SearchBar
         query={query}
         onSubmit={onSubmit}
-        placeholder="Search for a movie"
+        placeholder="搜尋電影..."
       />
       <Movies
         movieList={allMovieList}

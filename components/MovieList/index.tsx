@@ -33,7 +33,7 @@ const ListComponent = ({
     setSelectedMovie(null);
   };
 
-  if (isLoading) return <CardLoader />;
+  if (isLoading && !movieList.length) return <CardLoader />;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
@@ -43,6 +43,7 @@ const ListComponent = ({
           <MovieCard
             movie={movie}
             key={`${movie.id}-${idx}`}
+            idx={idx}
             isInWatchlist={isInWatchlist}
             addToWatchList={addToWatchList}
             removeFromWatchList={removeFromWatchList}

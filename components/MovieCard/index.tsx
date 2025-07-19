@@ -9,12 +9,14 @@ import { formatDate } from "@/helpers/formatDate";
 const MovieCard = ({
   movie,
   isInWatchlist,
+  idx,
   onClick,
   addToWatchList,
   removeFromWatchList,
 }: {
   movie: Movie;
   isInWatchlist: boolean;
+  idx: number;
   addToWatchList: (movie: Movie) => void;
   removeFromWatchList: (movieId: number) => void;
   onClick?: (movie: Movie) => void;
@@ -40,7 +42,7 @@ const MovieCard = ({
           alt={movie.title}
           fill
           className="object-cover"
-          loading="lazy"
+          loading={idx < 5 ? "eager" : "lazy"}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
