@@ -7,7 +7,7 @@ const WatchListPage = () => {
   const { watchList, isLoading, addToWatchList, removeFromWatchList } = useWatchList(); 
 
   return (
-    <div className="container mx-auto px-4 lg:px-0">
+    <div className="container mx-auto px-4 lg:px-8">
       <h2 className="text-2xl lg:text-4xl font-bold text-white my-8">
         待看電影
       </h2>

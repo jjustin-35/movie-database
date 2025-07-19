@@ -94,12 +94,12 @@ const InfoHead = ({ movie, videos }: { movie: MovieDetails, videos: Video[] }) =
           {isInWatchlist ? (
             <>
               <HeartOff className="w-5 h-5" />
-              從待看清單移除
+              <span className="hidden sm:block">從待看清單移除</span>
             </>
           ) : (
             <>
               <Heart className="w-5 h-5" />
-              加入待看清單
+              <span className="hidden sm:block">加入待看清單</span>
             </>
           )}
         </button>

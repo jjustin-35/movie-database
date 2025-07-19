@@ -55,7 +55,7 @@ const MovieCard = ({
 
         <button
           onClick={handleWatchlistToggle}
-          className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors flex items-center justify-center cursor-pointer"
+          className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors flex items-center justify-center"
           title={isInWatchlist ? "從待看清單移除" : "加入待看清單"}
         >
           {isInWatchlist ? (
