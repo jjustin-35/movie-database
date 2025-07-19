@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import MovieList from '../components/MovieList';
-import { Movie } from '../constants/type';
+import MovieList from '../../components/MovieList';
+import { Movie } from '../../constants/type';
 
 // 模擬 MovieCard 元件
 jest.mock('../components/MovieCard', () => ({

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, act, waitFor } from '@testing-library/react';
-import { WatchListProvider, useWatchList } from '../context/watchListContext';
-import { Movie } from '../constants/type';
+import { WatchListProvider, useWatchList } from '../../context/watchListContext';
+import { Movie } from '../../constants/type';
 
 // 模擬 localStorage
 const mockLocalStorage = (() => {

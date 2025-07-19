@@ -1,5 +1,5 @@
-import { getImageUrl, getYoutubeUrl, getApiUrl } from '../helpers/getUrl';
-import configs from '../config';
+import { getImageUrl, getYoutubeUrl, getApiUrl } from '../../helpers/getUrl';
+import configs from '../../config';
 
 jest.mock('../config', () => ({
   API_BASE_URL: 'https://api.themoviedb.org/3',

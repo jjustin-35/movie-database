@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import MovieCard from '../components/MovieCard';
-import { getImageUrl } from '../helpers/getUrl';
-import { formatDate } from '../helpers/formatDate';
-import { Movie } from '../constants/type';
+import MovieCard from '../../components/MovieCard';
+import { getImageUrl } from '../../helpers/getUrl';
+import { formatDate } from '../../helpers/formatDate';
+import { Movie } from '../../constants/type';
 
 // Mock next/image
 jest.mock('next/image', () => ({
@@ -32,8 +32,8 @@ jest.mock('../components/PlaceholderImage', () => ({
 describe('MovieCard', () => {
   const mockMovie: Movie = {
     id: 123,
-    title: '測試電影',
-    overview: '這是一部測試電影的簡介',
+    title: 'movie-title',
+    overview: 'movie-overview',
     poster_path: '/path/to/poster.jpg',
     backdrop_path: '/path/to/backdrop.jpg',
     release_date: '2025-07-20',
@@ -42,7 +42,7 @@ describe('MovieCard', () => {
     genre_ids: [28, 12, 878],
     adult: false,
     original_language: 'zh',
-    original_title: '測試電影原名',
+    original_title: 'movie-original-title',
     popularity: 123.45,
     video: false
   };
@@ -66,10 +66,10 @@ describe('MovieCard', () => {
     render(<MovieCard {...mockProps} />);
 
     // Verify movie title
-    expect(screen.getByText('測試電影')).toBeInTheDocument();
+    expect(screen.getByText('movie-title')).toBeInTheDocument();
     
     // Verify movie overview
-    expect(screen.getByText('這是一部測試電影的簡介')).toBeInTheDocument();
+    expect(screen.getByText('movie-overview')).toBeInTheDocument();
     
     // Verify rating
     expect(screen.getByText('8.5')).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe('MovieCard', () => {
     render(<MovieCard {...mockProps} />);
     
     // Verify image element exists
-    const image = screen.getByAltText('測試電影');
+    const image = screen.getByAltText('movie-title');
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', 'https://example.com/image.jpg');
     
@@ -103,14 +103,14 @@ describe('MovieCard', () => {
     expect(screen.getByTestId('placeholder-image')).toBeInTheDocument();
     
     // Verify image does not exist
-    expect(screen.queryByAltText('測試電影')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('movie-title')).not.toBeInTheDocument();
   });
 
   test('should call onClick function when card is clicked', () => {
     render(<MovieCard {...mockProps} />);
     
     // Click the card
-    fireEvent.click(screen.getByText('測試電影').closest('div').closest('div'));
+    fireEvent.click(screen.getByText('movie-title').closest('div').closest('div'));
     
     // Verify onClick was called
     expect(mockProps.onClick).toHaveBeenCalledWith(mockMovie);
@@ -120,7 +120,7 @@ describe('MovieCard', () => {
     render(<MovieCard {...mockProps} />);
     
     // Click heart button
-    const heartButton = screen.getByTitle('加入待看清單');
+    const heartButton = screen.getByTitle('add-to-watchlist');
     fireEvent.click(heartButton);
     
     // Verify addToWatchList was called
@@ -132,7 +132,7 @@ describe('MovieCard', () => {
     render(<MovieCard {...mockProps} isInWatchlist={true} />);
     
     // Click heart button
-    const heartButton = screen.getByTitle('從待看清單移除');
+    const heartButton = screen.getByTitle('remove-from-watchlist');
     fireEvent.click(heartButton);
     
     // Verify removeFromWatchList was called
@@ -144,7 +144,7 @@ describe('MovieCard', () => {
     render(<MovieCard {...mockProps} />);
     
     // Click heart button
-    const heartButton = screen.getByTitle('加入待看清單');
+    const heartButton = screen.getByTitle('add-to-watchlist');
     fireEvent.click(heartButton);
     
     // Verify onClick was not called
@@ -155,7 +155,7 @@ describe('MovieCard', () => {
     render(<MovieCard {...mockProps} isInWatchlist={true} />);
     
     // Verify red heart exists
-    const filledHeart = screen.getByTitle('從待看清單移除').querySelector('.fill-current');
+    const filledHeart = screen.getByTitle('remove-from-watchlist').querySelector('.fill-current');
     expect(filledHeart).toBeInTheDocument();
   });
 
@@ -163,7 +163,7 @@ describe('MovieCard', () => {
     render(<MovieCard {...mockProps} isInWatchlist={false} />);
     
     // Verify empty heart exists
-    const emptyHeart = screen.getByTitle('加入待看清單').querySelector('.text-white');
+    const emptyHeart = screen.getByTitle('add-to-watchlist').querySelector('.text-white');
     expect(emptyHeart).toBeInTheDocument();
   });
 });

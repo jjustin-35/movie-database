@@ -1,5 +1,5 @@
-import { transformMovie, transformMovieDetail } from '../helpers/transform';
-import { Movie } from '../constants/type';
+import { transformMovie, transformMovieDetail } from '../../helpers/transform';
+import { Movie } from '../../constants/type';
 
 describe('transformMovie', () => {
   test('should correctly transform complete movie data', () => {

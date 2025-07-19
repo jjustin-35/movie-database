@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, renderHook } from '@testing-library/react';
-import useObserver from '../hooks/useObserver';
+import useObserver from '../../hooks/useObserver';
 
 // 模擬 IntersectionObserver
 const mockIntersectionObserver = jest.fn();

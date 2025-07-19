@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../../components/SearchBar';
 
 describe('SearchBar', () => {
   const mockProps = {

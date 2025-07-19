@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
-import { ToastProvider, useToast } from '../context/toastContext';
+import { ToastProvider, useToast } from '../../context/toastContext';
 
 // 模擬計時器
 jest.useFakeTimers();
