@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Heart, HeartOff, Star, Calendar } from "lucide-react";
+import { Heart, Star, Calendar } from "lucide-react";
 import { Movie } from "@/constants/type";
 import { getImageUrl } from "@/helpers/getUrl";
 import { formatDate } from "@/helpers/formatDate";
@@ -24,7 +24,8 @@ const MovieCard = ({
   const imageUrl = getImageUrl(movie.poster_path);
   const releaseDate = formatDate(movie.release_date);
 
-  const handleWatchlistToggle = () => {
+  const handleWatchlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (isInWatchlist) {
       removeFromWatchList(movie.id);
     } else {
@@ -42,7 +43,7 @@ const MovieCard = ({
           alt={movie.title}
           fill
           className="object-cover"
-          loading={idx < 5 ? "eager" : "lazy"}
+          priority={idx < 5}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
@@ -53,7 +54,7 @@ const MovieCard = ({
           title={isInWatchlist ? "從待看清單移除" : "加入待看清單"}
         >
           {isInWatchlist ? (
-            <HeartOff className="w-5 h-5 text-red-400" />
+            <Heart className="w-5 h-5 text-red-400 fill-current" />
           ) : (
             <Heart className="w-5 h-5 text-white" />
           )}

@@ -36,7 +36,7 @@ const ListComponent = ({
   if (isLoading && !movieList.length) return <CardLoader />;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 my-8">
       {movieList.map((movie, idx) => {
         const isInWatchlist = watchList.some((item) => item.id === movie.id);
         return (

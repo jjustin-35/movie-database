@@ -5,24 +5,28 @@ import { Movie } from "@/constants/type";
 
 interface WatchListContextType {
   watchList: Movie[];
+  isLoading: boolean;
   addToWatchList: (movie: Movie) => void;
   removeFromWatchList: (movieId: number) => void;
 }
 
 const WatchListContext = createContext<WatchListContextType>({
   watchList: [],
+  isLoading: false,
   addToWatchList: () => {},
   removeFromWatchList: () => {},
 });
 
 export const WatchListProvider = ({ children }: { children: React.ReactNode }) => {
   const [watchList, setWatchList] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedWatchList = localStorage.getItem("watchList");
     if (storedWatchList) {
       setWatchList(JSON.parse(storedWatchList));
     }
+    setIsLoading(false);
   }, []);
 
   const updateWatchList = (newWatchList: Movie[]) => {
@@ -42,7 +46,7 @@ export const WatchListProvider = ({ children }: { children: React.ReactNode }) =
 
   return (
     <WatchListContext.Provider
-      value={{ watchList, addToWatchList, removeFromWatchList }}
+      value={{ watchList, isLoading, addToWatchList, removeFromWatchList }}
     >
       {children}
     </WatchListContext.Provider>
