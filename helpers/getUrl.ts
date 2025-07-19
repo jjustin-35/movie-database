@@ -1,7 +1,7 @@
 import configs from "../config";
 
 export const getImageUrl = (path: string, size: string = "w500") => {
-  if (!path) return "/images/placeholder.png";
+  if (!path) return "";
   return `${configs.IMAGE_BASE_URL}/${size}${path}`;
 };
 

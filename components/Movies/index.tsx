@@ -15,16 +15,18 @@ const observerOptions = {
 const Movies = ({
   movieList,
   isLoading,
+  hasMore,
   onChangePage,
 }: {
   movieList: Movie[];
   isLoading: boolean;
+  hasMore: boolean;
   onChangePage: (page: number | ((prev: number) => number)) => void;
 }) => {
   const { watchList, addToWatchList, removeFromWatchList } = useWatchList();
 
   const onLoadMore = (entries: IntersectionObserverEntry[]) => {
-    if (entries[0].isIntersecting && !isLoading) {
+    if (entries[0].isIntersecting && !isLoading && hasMore) {
       onChangePage((prev) => prev + 1);
     }
   };

@@ -1,6 +1,7 @@
 import { Credits, MovieDetails } from "@/constants/type";
 import { getImageUrl } from "@/helpers/getUrl";
 import Image from "next/image";
+import ActorPlaceholder from "../../PlaceholderImage/actorPlaceholder";
 
 const InfoContent = ({ movie, credits }: { movie: MovieDetails, credits: Credits }) => {
   const director = credits?.crew.find((person) => person.job === "Director");
@@ -25,19 +26,25 @@ const InfoContent = ({ movie, credits }: { movie: MovieDetails, credits: Credits
         <div>
           <h3 className="text-xl font-bold text-white mb-4">主要演員</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {mainCast.map((actor) => (
+            {mainCast.map((actor) => {
+              const imageUrl = getImageUrl(actor.profile_path);
+              return (
               <div key={actor.id} className="text-center">
-                <Image
-                  src={getImageUrl(actor.profile_path, "w185")}
-                  alt={actor.name}
-                  className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
-                  width={1000}
-                  height={1000}
-                />
+                {imageUrl ? (
+                  <Image
+                    src={imageUrl}
+                    alt={actor.name}
+                    className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
+                    width={80}
+                    height={80}
+                  />
+                ) : (
+                  <ActorPlaceholder className="w-20 h-20 object-cover rounded-full mx-auto mb-2" />
+                )}
                 <p className="text-white text-sm font-medium">{actor.name}</p>
                 <p className="text-gray-400 text-xs">{actor.character}</p>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       )}

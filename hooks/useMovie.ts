@@ -32,6 +32,7 @@ export const useMovieList = (page = 1, query: string | null = null) => {
 
   const { data, error, isLoading } = useSWR<MovieListResponse>(url, fetcher);
 
+  const hasMore = data?.total_pages > page;
   const transformData = useMemo(() => {
     if (error || !data) {
       return [];
@@ -52,7 +53,7 @@ export const useMovieList = (page = 1, query: string | null = null) => {
     });
   }
 
-  return { data: transformData, error, isLoading };
+  return { data: transformData, error, isLoading, hasMore };
 };
 
 export const useMovieDetail = (id: number) => {

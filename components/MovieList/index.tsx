@@ -10,7 +10,7 @@ const MovieDetails = dynamic(() => import("../MovieDetails"), {
   ssr: false,
 });
 
-const ListComponent = ({
+const MovieList = ({
   movieList,
   watchList,
   isLoading,
@@ -62,4 +62,4 @@ const ListComponent = ({
   );
 };
 
-export default ListComponent;
+export default MovieList;

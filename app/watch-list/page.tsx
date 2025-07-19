@@ -8,9 +8,9 @@ const WatchListPage = () => {
 
   return (
     <div className="container mx-auto px-4 lg:px-0">
-      <h1 className="text-4xl font-bold text-white my-8">
+      <h2 className="text-2xl lg:text-4xl font-bold text-white my-8">
         待看電影
-      </h1>
+      </h2>
       <WatchList
         movieList={watchList}
         watchList={watchList}

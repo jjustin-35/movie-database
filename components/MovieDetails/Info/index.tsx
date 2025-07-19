@@ -3,6 +3,7 @@ import { getImageUrl } from "@/helpers/getUrl";
 import { AllMovieDetail } from "@/constants/type";
 import InfoHead from "./infoHead";
 import InfoContent from "./infoContent";
+import PlaceholderImage from "@/components/PlaceholderImage";
 interface InfoProps {
   movieDetail: AllMovieDetail;
 }
@@ -16,13 +17,17 @@ const Info = ({ movieDetail }: InfoProps) => {
       <div className="flex flex-col md:flex-row gap-6">
         {/* poster */}
         <div className="flex-shrink-0">
-          <Image
-            src={posterUrl}
-            alt={movie.title}
-            className="w-48 h-72 object-cover rounded-lg shadow-lg"
-            width={1000}
-            height={1000}
-          />
+          {posterUrl ? (
+            <Image
+              src={posterUrl}
+              alt={movie.title}
+              className="w-48 h-72 object-cover rounded-lg shadow-lg mx-auto sm:mx-0"
+              width={192}
+              height={288}
+            />
+          ) : (
+            <PlaceholderImage className="w-48 h-72 object-cover rounded-lg shadow-lg mx-auto sm:mx-0" />
+          )}
         </div>
 
         <div className="flex-1">

@@ -7,6 +7,7 @@ import { Movie } from "@/constants/type";
 import { useMovieDetail } from "@/hooks/useMovie";
 import { getImageUrl } from "@/helpers/getUrl";
 import LoadingSpinner from "../Loading/spinner";
+import PlaceholderImage from "../PlaceholderImage";
 import Info from "./Info";
 
 interface MovieDetailsProps {
@@ -26,7 +27,7 @@ const MovieDetails = ({ movie, onClose }: MovieDetailsProps) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 pt-20">
       <div className="bg-white/10 backdrop-blur-md rounded-xl max-w-4xl w-full h-full max-h-[80vh] overflow-y-auto">
         <button
           onClick={onClose}
@@ -43,13 +44,20 @@ const MovieDetails = ({ movie, onClose }: MovieDetailsProps) => {
           <>
             {/* backdrop */}
             <div className="relative h-64 md:h-80">
-              <Image
-                src={backdropUrl}
-                alt={`${movie.title} backdrop`}
-                className="w-full h-full object-cover"
-                width={1000}
-                height={1000}
-              />
+              {backdropUrl ? (
+                <Image
+                  src={backdropUrl}
+                  alt={`${movie.title} backdrop`}
+                  className="w-full h-full object-cover"
+                  width={1000}
+                  height={1000}
+                  onError={(e) => {
+                    e.currentTarget.src = "";
+                  }}
+                />
+              ) : (
+                <PlaceholderImage className="w-full h-full object-cover" />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
             </div>
             <Info movieDetail={movieDetail} />

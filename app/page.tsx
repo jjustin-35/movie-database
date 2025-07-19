@@ -10,7 +10,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [allMovieList, setAllMovieList] = useState<Movie[]>([]);
-  const { data: movieList, isLoading } = useMovieList(page, query);
+  const { data: movieList, isLoading, hasMore } = useMovieList(page, query);
 
   useEffect(() => {
     if (movieList && !isLoading) {
@@ -34,6 +34,7 @@ export default function Home() {
       <Movies
         movieList={allMovieList}
         isLoading={isLoading}
+        hasMore={hasMore}
         onChangePage={setPage}
       />
     </div>

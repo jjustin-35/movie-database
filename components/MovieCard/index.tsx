@@ -5,6 +5,7 @@ import { Heart, Star, Calendar } from "lucide-react";
 import { Movie } from "@/constants/type";
 import { getImageUrl } from "@/helpers/getUrl";
 import { formatDate } from "@/helpers/formatDate";
+import PlaceholderImage from "../PlaceholderImage";
 
 const MovieCard = ({
   movie,
@@ -34,23 +35,27 @@ const MovieCard = ({
   };
   return (
     <div
-      className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer group"
+      className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden hover:scale-102 transition-all duration-300 cursor-pointer group"
       onClick={() => onClick(movie)}
     >
       <div className="relative w-full h-72">
-        <Image
-          src={imageUrl}
-          alt={movie.title}
-          fill
-          className="object-cover"
-          priority={idx < 5}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
+        {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={movie.title}
+              fill
+              className="object-cover"
+              priority={idx < 5}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <PlaceholderImage className="w-full h-full object-cover" />
+          )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
         <button
           onClick={handleWatchlistToggle}
-          className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors"
+          className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors flex items-center justify-center cursor-pointer"
           title={isInWatchlist ? "從待看清單移除" : "加入待看清單"}
         >
           {isInWatchlist ? (
