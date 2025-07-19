@@ -12,7 +12,7 @@ const Info = ({ movieDetail }: InfoProps) => {
   const posterUrl = getImageUrl(movie?.poster_path, "w500");
 
   return (
-    <div className="p-6 -mt-32 relative z-10">
+    <div className="p-6 -mt-30 relative z-10">
       <div className="flex flex-col md:flex-row gap-6">
         {/* poster */}
         <div className="flex-shrink-0">

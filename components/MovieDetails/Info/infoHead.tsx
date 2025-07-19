@@ -35,12 +35,9 @@ const InfoHead = ({ movie, videos }: { movie: MovieDetails, videos: Video[] }) =
   };
   return (
     <>
-      <h1 className="text-3xl font-bold text-white mb-2">{movie.title}</h1>
-      {/* {movie.tagline && (
-    <p className="text-gray-300 italic mb-4">{movie.tagline}</p>
-  )} */}
+      <h1 className="text-3xl font-bold text-white mb-6">{movie.title}</h1>
 
-      <div className="flex flex-wrap gap-6 mb-4">
+      <div className="flex flex-wrap gap-6 mb-6">
         <div className="flex items-center gap-2 text-gray-300">
           <Star className="w-5 h-5 text-yellow-400 fill-current" />
           <span className="font-medium">{movie.vote_average.toFixed(1)}</span>
