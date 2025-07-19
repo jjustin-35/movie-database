@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Movie } from "@/constants/type";
 import { useMovieList } from "@/hooks/useMovie";
 import SearchBar from "@/components/SearchBar";
-import MovieList from "@/components/MovieList";
+import Movies from "@/components/Movies";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -25,13 +25,13 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto px-4 lg:px-0">
+    <div className="container mx-auto px-4">
       <SearchBar
+        query={query}
         onSubmit={onSubmit}
         placeholder="Search for a movie"
-        className="mb-4"
       />
-      <MovieList
+      <Movies
         movieList={allMovieList}
         isLoading={isLoading}
         onChangePage={setPage}

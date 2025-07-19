@@ -1,6 +1,6 @@
 "use client";
 
-import WatchList from "@/components/MovieList/listComponent";
+import WatchList from "@/components/MovieList";
 import { useWatchList } from "@/context/watchListContext";
 
 const WatchListPage = () => {
@@ -11,6 +11,7 @@ const WatchListPage = () => {
       <WatchList
         movieList={watchList}
         watchList={watchList}
+        isLoading={false}
         addToWatchList={addToWatchList}
         removeFromWatchList={removeFromWatchList}
       />

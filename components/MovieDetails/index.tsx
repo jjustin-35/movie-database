@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 import { Movie } from "@/constants/type";
 import { useMovieDetail } from "@/hooks/useMovie";
 import { getImageUrl } from "@/helpers/getUrl";
-import LoadingSpinner from "../Loading/LoadingSpinner";
+import LoadingSpinner from "../Loading/spinner";
 import Info from "./Info";
 
 interface MovieDetailsProps {

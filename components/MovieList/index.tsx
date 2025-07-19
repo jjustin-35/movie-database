@@ -1,58 +1,64 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import { Movie } from "@/constants/type";
-import useObserver from "@/hooks/useObserver";
-import { useWatchList } from "@/context/watchListContext";
-import LoadingSpinner from "../Loading/LoadingSpinner";
-import ListComponent from "./listComponent";
+import CardLoader from "../Loading/cardLoader";
+import MovieCard from "../MovieCard";
 
-const observerOptions = {
-  root: null,
-  rootMargin: "100px",
-  threshold: 0.3,
-};
+const MovieDetails = dynamic(() => import("../MovieDetails"), {
+  ssr: false,
+});
 
-const MovieList = ({
+const ListComponent = ({
   movieList,
+  watchList,
   isLoading,
-  onChangePage,
+  addToWatchList,
+  removeFromWatchList,
 }: {
   movieList: Movie[];
+  watchList: Movie[];
   isLoading: boolean;
-  onChangePage: (page: number | ((prev: number) => number)) => void;
+  addToWatchList: (movie: Movie) => void;
+  removeFromWatchList: (movieId: number) => void;
 }) => {
-  const { watchList, addToWatchList, removeFromWatchList } = useWatchList();
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const onLoadMore = (entries: IntersectionObserverEntry[]) => {
-    if (entries[0].isIntersecting && !isLoading) {
-      onChangePage((prev) => prev + 1);
-    }
+  const onClick = (movie: Movie) => {
+    setSelectedMovie(movie);
   };
 
-  const loadingRef = useObserver(onLoadMore, observerOptions);
+  const onCloseMovieDetails = () => {
+    setSelectedMovie(null);
+  };
 
-  if (!movieList?.length && !isLoading) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-400 text-xl">沒有找到相關電影</p>
-      </div>
-    );
-  }
+  if (isLoading) return <CardLoader />;
 
   return (
-    <div>
-      <ListComponent
-        movieList={movieList}
-        watchList={watchList}
-        addToWatchList={addToWatchList}
-        removeFromWatchList={removeFromWatchList}
-      />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+      {movieList.map((movie, idx) => {
+        const isInWatchlist = watchList.some((item) => item.id === movie.id);
+        return (
+          <MovieCard
+            movie={movie}
+            key={`${movie.id}-${idx}`}
+            isInWatchlist={isInWatchlist}
+            addToWatchList={addToWatchList}
+            removeFromWatchList={removeFromWatchList}
+            onClick={onClick}
+          />
+        );
+      })}
 
-      <div ref={loadingRef} className="flex justify-center py-8">
-        {isLoading && <LoadingSpinner size={{ width: 40, height: 40 }} />}
-      </div>
+      {selectedMovie && (
+        <MovieDetails
+          movie={selectedMovie}
+          onClose={onCloseMovieDetails}
+        />
+      )}
     </div>
   );
 };
 
-export default MovieList;
+export default ListComponent;
