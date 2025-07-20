@@ -5,6 +5,7 @@ import "./globals.css";
 import Provider from "@/context";
 import Header from "@/components/Header";
 import Toast from "@/components/Toast";
+import ScrollTopButton from "@/components/ScrollTopButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <Header />
           <Toast />
           {children}
+          <ScrollTopButton />
         </Provider>
       </body>
     </html>

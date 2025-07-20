@@ -1,13 +1,15 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Movie } from "@/constants/type";
+import { Movie, OrderType } from "@/constants/type";
+import { orderList } from "@/helpers/orderList";
 
 interface WatchListContextType {
   watchList: Movie[];
   isLoading: boolean;
   addToWatchList: (movie: Movie) => void;
   removeFromWatchList: (movieId: number) => void;
+  orderWatchList: (type: OrderType) => void;
 }
 
 const WatchListContext = createContext<WatchListContextType>({
@@ -15,6 +17,7 @@ const WatchListContext = createContext<WatchListContextType>({
   isLoading: false,
   addToWatchList: () => {},
   removeFromWatchList: () => {},
+  orderWatchList: () => {},
 });
 
 export const WatchListProvider = ({ children }: { children: React.ReactNode }) => {
@@ -44,9 +47,14 @@ export const WatchListProvider = ({ children }: { children: React.ReactNode }) =
     updateWatchList(newWatchList);
   };
 
+  const orderWatchList = (type: OrderType = OrderType.voteAverage) => {
+    const newWatchList = orderList({order: 'desc', type, list: watchList});
+    updateWatchList(newWatchList);
+  };
+
   return (
     <WatchListContext.Provider
-      value={{ watchList, isLoading, addToWatchList, removeFromWatchList }}
+      value={{ watchList, isLoading, addToWatchList, removeFromWatchList, orderWatchList }}
     >
       {children}
     </WatchListContext.Provider>

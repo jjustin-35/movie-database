@@ -84,3 +84,9 @@ export interface AllMovieDetail {
   credits: Credits;
   videos: Video[];
 }
+
+export enum OrderType {
+  popularity = "popularity",
+  voteAverage = "vote_average",
+  releaseDate = "release_date",
+}

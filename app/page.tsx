@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Movie } from "@/constants/type";
+import { Movie, OrderType } from "@/constants/type";
 import { useMovieList } from "@/hooks/useMovie";
+import { orderList } from "@/helpers/orderList";
 import SearchBar from "@/components/SearchBar";
 import Movies from "@/components/Movies";
+import OrderButton from "@/components/OrderButton";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -17,6 +19,11 @@ export default function Home() {
       setAllMovieList((prev) => [...prev, ...movieList]);
     }
   }, [movieList, isLoading]);
+
+  const orderMovieList = (type: OrderType) => {
+    const newMovieList = orderList({order: 'desc', type, list: allMovieList});
+    setAllMovieList(newMovieList);
+  };
 
   const onSubmit = (query: string) => {
     setQuery(query);
@@ -31,6 +38,7 @@ export default function Home() {
         onSubmit={onSubmit}
         placeholder="搜尋電影..."
       />
+      <OrderButton onOrderChange={orderMovieList} />
       <Movies
         movieList={allMovieList}
         isLoading={isLoading}
