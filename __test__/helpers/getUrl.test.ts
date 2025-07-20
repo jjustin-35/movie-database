@@ -1,7 +1,7 @@
-import { getImageUrl, getYoutubeUrl, getApiUrl } from '../../helpers/getUrl';
-import configs from '../../config';
+import { getImageUrl, getYoutubeUrl, getApiUrl } from '@/helpers/getUrl';
+import configs from '@/config';
 
-jest.mock('../config', () => ({
+jest.mock('@/config', () => ({
   API_BASE_URL: 'https://api.themoviedb.org/3',
   IMAGE_BASE_URL: 'https://image.tmdb.org/t/p',
   API_KEY: 'test-api-key'
@@ -48,13 +48,8 @@ describe('getApiUrl', () => {
     const apiPath = '/movie/popular';
     const result = getApiUrl(apiPath);
     
-    // Verify URL contains correct base path
     expect(result).toContain(`${configs.API_BASE_URL}${apiPath}`);
-    
-    // Verify URL contains API key
     expect(result).toContain(`api_key=${configs.API_KEY}`);
-    
-    // Verify URL contains default language
     expect(result).toContain('language=zh-TW');
   });
 
@@ -66,7 +61,6 @@ describe('getApiUrl', () => {
     };
     const result = getApiUrl(apiPath, params);
     
-    // Verify URL contains all parameters
     expect(result).toContain(`api_key=${configs.API_KEY}`);
     expect(result).toContain('language=zh-TW');
     expect(result).toContain('query=test+movie');

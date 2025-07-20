@@ -4,6 +4,9 @@
  */
 
 import type {Config} from 'jest';
+import NextJest from 'next/jest';
+
+const nextJest = NextJest({ dir: './' });
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
@@ -206,4 +209,4 @@ const config: Config = {
   // watchman: true,
 };
 
-export default config;
+export default nextJest(config);

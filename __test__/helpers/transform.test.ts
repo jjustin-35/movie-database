@@ -5,8 +5,8 @@ describe('transformMovie', () => {
   test('should correctly transform complete movie data', () => {
     const mockMovie: Movie = {
       id: 123,
-      title: '測試電影',
-      overview: '這是一部測試電影',
+      title: 'Test Movie',
+      overview: 'This is a test movie',
       poster_path: '/path/to/poster.jpg',
       backdrop_path: '/path/to/backdrop.jpg',
       release_date: '2025-07-20',
@@ -15,7 +15,7 @@ describe('transformMovie', () => {
       genre_ids: [28, 12, 878],
       adult: false,
       original_language: 'zh',
-      original_title: '測試電影原名',
+      original_title: 'Test Movie original name',
       popularity: 123.45,
       video: false
     };
@@ -28,14 +28,14 @@ describe('transformMovie', () => {
   test('should handle partial missing data', () => {
     const mockPartialMovie = {
       id: 123,
-      title: '測試電影'
+      title: 'Test Movie'
     };
 
     const result = transformMovie(mockPartialMovie as any);
 
     expect(result).toEqual({
       id: 123,
-      title: '測試電影',
+      title: 'Test Movie',
       overview: '',
       poster_path: null,
       backdrop_path: null,
@@ -77,8 +77,8 @@ describe('transformMovieDetail', () => {
   test('should correctly transform movie detail data', () => {
     const mockMovie = {
       id: 123,
-      title: '測試電影',
-      overview: '這是一部測試電影',
+      title: 'Test Movie',
+      overview: 'This is a test movie',
       poster_path: '/path/to/poster.jpg',
       backdrop_path: '/path/to/backdrop.jpg',
       release_date: '2025-07-20',
@@ -87,16 +87,16 @@ describe('transformMovieDetail', () => {
       genre_ids: [28, 12, 878],
       adult: false,
       original_language: 'zh',
-      original_title: '測試電影原名',
+      original_title: 'Test Movie original name',
       popularity: 123.45,
       video: false,
       runtime: 120,
-      genres: [{ id: 28, name: '動作' }],
-      production_companies: [{ id: 1, name: '測試工作室', logo_path: '/logo.png', origin_country: 'TW' }],
-      production_countries: [{ iso_3166_1: 'TW', name: '台灣' }],
-      spoken_languages: [{ iso_639_1: 'zh', name: '中文' }],
-      status: '已上映',
-      tagline: '這是標語',
+      genres: [{ id: 28, name: 'Action' }],
+      production_companies: [{ id: 1, name: 'Test Studio', logo_path: '/logo.png', origin_country: 'TW' }],
+      production_countries: [{ iso_3166_1: 'TW', name: 'Taiwan' }],
+      spoken_languages: [{ iso_639_1: 'zh', name: 'Chinese' }],
+      status: 'Released',
+      tagline: 'This is a tagline',
       budget: 1000000,
       revenue: 5000000,
       homepage: 'https://example.com',
@@ -104,12 +104,12 @@ describe('transformMovieDetail', () => {
     };
 
     const mockCredits = {
-      cast: [{ id: 1, name: '演員1', character: '角色1', profile_path: '/actor1.jpg' }],
-      crew: [{ id: 2, name: '導演', job: 'Director', profile_path: '/director.jpg' }]
+      cast: [{ id: 1, name: 'Actor1', character: 'Character1', profile_path: '/actor1.jpg' }],
+      crew: [{ id: 2, name: 'Director', job: 'Director', profile_path: '/director.jpg' }]
     };
 
     const mockVideos = [
-      { id: 'vid1', key: 'abc123', name: '預告片', site: 'YouTube', type: 'Trailer', official: true, published_at: '2025-07-20' }
+      { id: 'vid1', key: 'abc123', name: 'Trailer', site: 'YouTube', type: 'Trailer', official: true, published_at: '2025-07-20' }
     ];
 
     const result = transformMovieDetail({
@@ -120,9 +120,9 @@ describe('transformMovieDetail', () => {
 
     expect(result.movie).toMatchObject({
       id: 123,
-      title: '測試電影',
+      title: 'Test Movie',
       runtime: 120,
-      genres: [{ id: 28, name: '動作' }]
+      genres: [{ id: 28, name: 'Action' }]
     });
     expect(result.credits.cast).toHaveLength(1);
     expect(result.credits.crew).toHaveLength(1);
@@ -132,7 +132,7 @@ describe('transformMovieDetail', () => {
   test('should handle missing movie detail data', () => {
     const mockMovie = {
       id: 123,
-      title: '測試電影'
+      title: 'Test Movie'
     };
 
     const result = transformMovieDetail({
@@ -143,7 +143,7 @@ describe('transformMovieDetail', () => {
 
     expect(result.movie).toMatchObject({
       id: 123,
-      title: '測試電影',
+      title: 'Test Movie',
       runtime: 0,
       genres: []
     });

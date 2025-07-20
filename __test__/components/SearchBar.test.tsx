@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '@/components/SearchBar';
 
 describe('SearchBar', () => {
   const mockProps = {
-    onSubmit: jest.fn(),
+    onSubmit: jest.fn((query: string) => { console.log(query); }),
     placeholder: '搜尋電影...',
     query: ''
   };
@@ -16,156 +16,90 @@ describe('SearchBar', () => {
   test('should render search bar correctly', () => {
     render(<SearchBar {...mockProps} />);
     
-    // Verify search input exists
     const searchInput = screen.getByPlaceholderText('搜尋電影...');
     expect(searchInput).toBeInTheDocument();
-    
-    // Verify search button exists
-    const searchButton = screen.getByRole('button', { name: /搜尋/i });
-    expect(searchButton).toBeInTheDocument();
   });
 
   test('should update input value after text entry', () => {
     render(<SearchBar {...mockProps} />);
     
-    // Get search input
     const searchInput = screen.getByPlaceholderText('搜尋電影...');
+    fireEvent.change(searchInput, { target: { value: 'test movie' } });
     
-    // Enter text
-    fireEvent.change(searchInput, { target: { value: '測試電影' } });
-    
-    // Verify input value has been updated
-    expect(searchInput).toHaveValue('測試電影');
+    expect(searchInput).toHaveValue('test movie');
   });
 
   test('should call onSubmit function when form is submitted', async () => {
     render(<SearchBar {...mockProps} />);
     
-    // Get search input and form
     const searchInput = screen.getByPlaceholderText('搜尋電影...');
     const form = searchInput.closest('form');
     
-    // Enter text
-    fireEvent.change(searchInput, { target: { value: '測試電影' } });
-    
-    // Submit form
+    fireEvent.change(searchInput, { target: { value: 'test movie' } });
     fireEvent.submit(form);
     
-    // Verify onSubmit was called
     await waitFor(() => {
-      expect(mockProps.onSubmit).toHaveBeenCalledWith('測試電影');
+      expect(mockProps.onSubmit).toHaveBeenCalledWith('test movie');
     });
   });
 
-  test('should call onSubmit function when Enter key is pressed', async () => {
+  test('should not call onSubmit function when searching empty string', async () => {
     render(<SearchBar {...mockProps} />);
     
-    // Get search input and form
     const searchInput = screen.getByPlaceholderText('搜尋電影...');
-    const form = searchInput.closest('form');
     
-    // Enter text
-    fireEvent.change(searchInput, { target: { value: '測試電影' } });
+    fireEvent.change(searchInput, { target: { value: '' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
     
-    // Simulate form submission (Enter key triggers form submission)
-    fireEvent.submit(form);
-    
-    // Verify onSubmit was called
     await waitFor(() => {
-      expect(mockProps.onSubmit).toHaveBeenCalledWith('測試電影');
+      expect(mockProps.onSubmit).not.toHaveBeenCalled();
     });
-  });
-
-  test('should not call onSearch function when searching empty string', () => {
-    render(<SearchBar {...mockProps} />);
-    
-    // Get search button
-    const searchButton = screen.getByRole('button', { name: /搜尋/i });
-    
-    // Click search button (input is empty)
-    fireEvent.click(searchButton);
-    
-    // Verify onSearch was not called
-    expect(mockProps.onSearch).not.toHaveBeenCalled();
   });
 
   test('should display clear button when search text exists', () => {
     render(<SearchBar {...mockProps} />);
     
-    // Clear button should not be displayed initially
     expect(screen.queryByTitle('清除搜尋')).not.toBeInTheDocument();
     
-    // Get search input
     const searchInput = screen.getByPlaceholderText('搜尋電影...');
+    fireEvent.change(searchInput, { target: { value: 'test movie' } });
     
-    // Enter text
-    fireEvent.change(searchInput, { target: { value: '測試電影' } });
-    
-    // Verify clear button is displayed
     expect(screen.getByTitle('清除搜尋')).toBeInTheDocument();
   });
 
-  test('should clear input and call onClear function when clear button is clicked', () => {
+  test('should clear input and not call onSubmit when clear button is clicked and input is not submitted', () => {
     render(<SearchBar {...mockProps} />);
     
-    // Get search input
     const searchInput = screen.getByPlaceholderText('搜尋電影...');
     
-    // Enter text
-    fireEvent.change(searchInput, { target: { value: '測試電影' } });
+    fireEvent.change(searchInput, { target: { value: 'test movie' } });
     
-    // Click clear button
     const clearButton = screen.getByTitle('清除搜尋');
     fireEvent.click(clearButton);
     
-    // Verify input is cleared
     expect(searchInput).toHaveValue('');
-    
-    // Verify onClear was called
-    expect(mockProps.onClear).toHaveBeenCalled();
+    expect(mockProps.onSubmit).not.toHaveBeenCalled();
   });
 
-  test('should keep input focused after search', async () => {
-    render(<SearchBar {...mockProps} />);
+  test('should clear input and submit empty string when clear button is clicked and input is submitted', async () => {
+    const { rerender } = render(<SearchBar {...mockProps} />);
     
-    // Get search input and button
     const searchInput = screen.getByPlaceholderText('搜尋電影...');
-    const searchButton = screen.getByRole('button', { name: /搜尋/i });
+    const form = searchInput.closest('form');
+    const query = 'test movie';
+
+    fireEvent.change(searchInput, { target: { value: query } });
+    fireEvent.submit(form);
+
+    rerender(<SearchBar {...mockProps} query={query} />);
     
-    // Enter text
-    fireEvent.change(searchInput, { target: { value: '測試電影' } });
+    const clearButton = screen.getByTitle('清除搜尋');
+    fireEvent.click(clearButton);
     
-    // Click search button
-    fireEvent.click(searchButton);
-    
-    // Verify input remains focused
     await waitFor(() => {
-      expect(document.activeElement).toBe(searchInput);
+      expect(searchInput).toHaveValue('');
     });
-  });
 
-  test('should handle initial search value correctly', () => {
-    // Render with initial search value
-    render(<SearchBar {...mockProps} initialSearchValue="初始搜尋" />);
-    
-    // Verify input's initial value
-    const searchInput = screen.getByPlaceholderText('搜尋電影...');
-    expect(searchInput).toHaveValue('初始搜尋');
-    
-    // Verify clear button is displayed
-    expect(screen.getByTitle('清除搜尋')).toBeInTheDocument();
-  });
-
-  test('should not call onSearch function when Enter key is pressed with empty input', () => {
-    render(<SearchBar {...mockProps} />);
-    
-    // Get search input
-    const searchInput = screen.getByPlaceholderText('搜尋電影...');
-    
-    // Press Enter key (input is empty)
-    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
-    
-    // Verify onSearch was not called
-    expect(mockProps.onSearch).not.toHaveBeenCalled();
+    expect(mockProps.onSubmit).toHaveBeenCalledWith('');
   });
 });

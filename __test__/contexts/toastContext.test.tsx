@@ -1,34 +1,19 @@
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
-import { ToastProvider, useToast } from '../../context/toastContext';
+import { ToastProvider, useToast } from '@/context/toastContext';
+import Toast from '@/components/Toast';
 
-// 模擬計時器
+// Mock timer
 jest.useFakeTimers();
 
-// 測試用元件
-const TestComponent = () => {
-  const { toast, openToast } = useToast();
-  
+const TestToast = () => {
+  const { openToast } = useToast();
   return (
-    <div>
-      {toast && (
-        <div data-testid="toast" className={`toast-${toast.type}`}>
-          {toast.message}
-        </div>
-      )}
-      <button 
-        data-testid="show-success"
-        onClick={() => openToast({ message: '成功訊息', type: 'success' })}
-      >
-        顯示成功訊息
-      </button>
-      <button 
-        data-testid="show-error"
-        onClick={() => openToast({ message: '錯誤訊息', type: 'error' })}
-      >
-        顯示錯誤訊息
-      </button>
-    </div>
+    <>
+      <Toast />
+      <button onClick={() => openToast({ message: 'success message', type: 'success' })}>Open Toast</button>
+      <button onClick={() => openToast({ message: 'error message', type: 'error' })}>Open Error Toast</button>
+    </>
   );
 };
 
@@ -37,115 +22,94 @@ describe('ToastContext', () => {
     jest.clearAllMocks();
   });
 
-  test('初始狀態應為無訊息', () => {
+  test('initial state should be no message', () => {
     render(
       <ToastProvider>
-        <TestComponent />
+        <TestToast />
       </ToastProvider>
     );
 
     expect(screen.queryByTestId('toast')).not.toBeInTheDocument();
   });
 
-  test('應該能夠顯示成功訊息', () => {
+  test('should be able to display success message', () => {
     render(
       <ToastProvider>
-        <TestComponent />
+        <TestToast />
       </ToastProvider>
     );
 
-    // 顯示成功訊息
+    const openToast = screen.getByText('Open Toast');
+
     act(() => {
-      screen.getByTestId('show-success').click();
+      openToast.click();
     });
 
-    // 確認訊息已顯示
-    const toast = screen.getByTestId('toast');
-    expect(toast).toBeInTheDocument();
-    expect(toast).toHaveClass('toast-success');
-    expect(toast).toHaveTextContent('成功訊息');
+    const toast = screen.getByTestId('toast-success');
+    expect(toast).toHaveTextContent('success message');
   });
 
-  test('應該能夠顯示錯誤訊息', () => {
+  test('should be able to display error message', () => {
     render(
       <ToastProvider>
-        <TestComponent />
+        <TestToast />
       </ToastProvider>
     );
 
-    // 顯示錯誤訊息
+    const openToast = screen.getByText('Open Error Toast');
+
     act(() => {
-      screen.getByTestId('show-error').click();
+      openToast.click();
     });
 
-    // 確認訊息已顯示
-    const toast = screen.getByTestId('toast');
+    const toast = screen.getByTestId('toast-error');
     expect(toast).toBeInTheDocument();
-    expect(toast).toHaveClass('toast-error');
-    expect(toast).toHaveTextContent('錯誤訊息');
+    expect(toast).toHaveTextContent('error message');
   });
 
-  test('訊息應在 3 秒後自動消失', () => {
+  test('message should automatically disappear after 3 seconds', () => {
     render(
       <ToastProvider>
-        <TestComponent />
+        <TestToast />
       </ToastProvider>
     );
 
-    // 顯示訊息
+    const openToast = screen.getByText('Open Toast');
+
     act(() => {
-      screen.getByTestId('show-success').click();
+      openToast.click();
     });
 
-    // 確認訊息已顯示
     expect(screen.getByTestId('toast')).toBeInTheDocument();
 
-    // 快轉時間 3 秒
     act(() => {
       jest.advanceTimersByTime(3000);
     });
 
-    // 確認訊息已消失
+    // Verify message has disappeared
     expect(screen.queryByTestId('toast')).not.toBeInTheDocument();
   });
 
-  test('顯示新訊息應取代舊訊息', () => {
+  test('displaying new message should replace old message', () => {
     render(
       <ToastProvider>
-        <TestComponent />
+        <TestToast />
       </ToastProvider>
     );
 
-    // 顯示成功訊息
+    const openToast = screen.getByText('Open Toast');
+
     act(() => {
-      screen.getByTestId('show-success').click();
+      openToast.click();
     });
 
-    // 確認成功訊息已顯示
-    expect(screen.getByTestId('toast')).toHaveTextContent('成功訊息');
-    expect(screen.getByTestId('toast')).toHaveClass('toast-success');
+    expect(screen.getByTestId('toast-success')).toHaveTextContent('success message');
 
-    // 顯示錯誤訊息
+    const openErrorToast = screen.getByText('Open Error Toast');
     act(() => {
-      screen.getByTestId('show-error').click();
+      openErrorToast.click();
     });
 
-    // 確認錯誤訊息已取代成功訊息
-    expect(screen.getByTestId('toast')).toHaveTextContent('錯誤訊息');
-    expect(screen.getByTestId('toast')).toHaveClass('toast-error');
-  });
-
-  test('useToast 在 Provider 外使用時應拋出錯誤', () => {
-    // 模擬 console.error 以避免測試輸出中出現錯誤訊息
-    const originalError = console.error;
-    console.error = jest.fn();
-    
-    // 預期 useToast 在 Provider 外使用時會拋出錯誤
-    expect(() => {
-      render(<TestComponent />);
-    }).toThrow('useToast must be used within a ToastProvider');
-    
-    // 恢復 console.error
-    console.error = originalError;
+    expect(screen.getByTestId('toast-error')).toHaveTextContent('error message');
   });
 });

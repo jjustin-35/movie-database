@@ -17,8 +17,8 @@ const Toast = () => {
     );
 
   return (
-    <div className="fixed bottom-4 right-4 w-full max-w-md z-50">
-      <div className={`${bgColor} shadow-lg rounded-lg p-4 flex items-center gap-2`}>
+    <div data-testid="toast" className="fixed bottom-4 right-4 w-full max-w-md z-50">
+      <div data-testid={`toast-${toast.type}`} className={`${bgColor} shadow-lg rounded-lg p-4 flex items-center gap-2`}>
         {icon}
         <p className="text-sm text-white">{toast.message}</p>
       </div>

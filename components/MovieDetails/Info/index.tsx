@@ -20,7 +20,7 @@ const Info = ({ movieDetail }: InfoProps) => {
           {posterUrl ? (
             <Image
               src={posterUrl}
-              alt={movie.title}
+              alt={`${movie.title} poster`}
               className="w-48 h-72 object-cover rounded-lg shadow-lg mx-auto sm:mx-0"
               width={192}
               height={288}

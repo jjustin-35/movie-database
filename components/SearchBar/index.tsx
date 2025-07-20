@@ -40,6 +40,7 @@ const SearchBar = ({
           <button
             type="button"
             onClick={handleClear}
+            title="清除搜尋"
             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />

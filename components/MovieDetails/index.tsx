@@ -32,10 +32,11 @@ const MovieDetails = ({ movie, onClose }: MovieDetailsProps) => {
   };
 
   return (
-    <div onClick={onBlur} className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 pt-20">
+    <div onClick={onBlur} className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 pt-20" data-testid="movie-details-modal">
       <div className="bg-white/10 backdrop-blur-md rounded-xl max-w-4xl w-full h-full max-h-[80vh] overflow-y-auto no-scrollbar">
         <button
           onClick={onClose}
+          data-testid="close-button"
           className="absolute top-4 right-4 p-2 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors z-10"
         >
           <X className="w-6 h-6 text-white" />
