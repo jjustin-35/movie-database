@@ -12,7 +12,7 @@ const LoadingSpinner = ({
 }: LoaderRingProps) => {
   const { width, height } = size;
   return (
-    <div style={{ width, height }}>
+    <div style={{ width, height }} data-testid="loading-spinner">
       {[...Array(3)].map((_, idx) => (
         <span
           key={idx}
