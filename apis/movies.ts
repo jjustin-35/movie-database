@@ -15,7 +15,7 @@ interface VideoResponse {
   results: Video[];
 }
 
-export const getMovieList = async (page: number) => {
+export const getMovieList = async ([page]: [number]) => {
   try {
     const url = getApiUrl(apiPaths.MOVIE_POPULAR, { page });
     const response = await fetch(url);
@@ -37,9 +37,8 @@ export const getMovieList = async (page: number) => {
   }
 };
 
-export const getMovieSearch = async (page: number, query: string) => {
+export const getMovieSearch = async ([page, query]: [number, string]) => {
   try {
-    console.log("getMovieSearch", page, query);
     const url = getApiUrl(apiPaths.MOVIE_SEARCH, { page, query });
     const response = await fetch(url);
     const data: MovieListResponse = await response.json();
@@ -60,7 +59,7 @@ export const getMovieSearch = async (page: number, query: string) => {
   }
 };
 
-export const getMovieDetail = async (id: number) => {
+export const getMovieDetail = async ([id]: [number]) => {
   try {
     const urls = [
       getApiUrl(`${apiPaths.MOVIE}/${id}`),

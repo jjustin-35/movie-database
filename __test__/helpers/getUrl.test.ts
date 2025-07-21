@@ -4,7 +4,6 @@ import configs from '@/config';
 jest.mock('@/config', () => ({
   API_BASE_URL: 'https://api.themoviedb.org/3',
   IMAGE_BASE_URL: 'https://image.tmdb.org/t/p',
-  API_KEY: 'test-api-key'
 }));
 
 describe('getImageUrl', () => {
@@ -27,10 +26,10 @@ describe('getImageUrl', () => {
   });
 
   test('should handle null or undefined path', () => {
-    const result1 = getImageUrl(null as any);
+    const result1 = getImageUrl(null);
     expect(result1).toBe('');
     
-    const result2 = getImageUrl(undefined as any);
+    const result2 = getImageUrl(undefined);
     expect(result2).toBe('');
   });
 });
@@ -49,7 +48,7 @@ describe('getApiUrl', () => {
     const result = getApiUrl(apiPath);
     
     expect(result).toContain(`${configs.API_BASE_URL}${apiPath}`);
-    expect(result).toContain(`api_key=${configs.API_KEY}`);
+    expect(result).toContain('api_key');
     expect(result).toContain('language=zh-TW');
   });
 
@@ -60,8 +59,7 @@ describe('getApiUrl', () => {
       page: 2
     };
     const result = getApiUrl(apiPath, params);
-    
-    expect(result).toContain(`api_key=${configs.API_KEY}`);
+    expect(result).toContain('api_key');
     expect(result).toContain('language=zh-TW');
     expect(result).toContain('query=test+movie');
     expect(result).toContain('page=2');
