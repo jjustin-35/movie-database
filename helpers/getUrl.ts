@@ -15,7 +15,7 @@ export const getApiUrl = (
   language: string = "zh-TW"
 ) => {
   const originUrl = new URL(`${configs.API_BASE_URL}${apiPath}`);
-  originUrl.searchParams.append("api_key", configs.API_KEY);
+  originUrl.searchParams.append("api_key", process.env.API_KEY || "");
   originUrl.searchParams.append("language", language);
   if (params) {
     if (Object.keys(params).length === 0) return null;

@@ -1,44 +1,15 @@
 import useSWR from "swr";
-import { useMemo } from "react";
-import { Movie, MovieDetails, Credits, Video } from "@/constants/type";
-import apiPaths from "../constants/apiPath";
 import { useToast } from "@/context/toastContext";
-import { fetcher, multiFetcher } from "../helpers/fetcher";
-import { transformMovie, transformMovieDetail } from "../helpers/transform";
-import { getApiUrl } from "@/helpers/getUrl";
-
-interface MovieListResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
-
-interface VideoResponse {
-  results: Video[];
-}
+import { getMovieList, getMovieSearch, getMovieDetail } from "@/apis/movies";
 
 export const useMovieList = (page = 1, query: string | null = null) => {
   const { openToast } = useToast();
-  const url = (() => {
-    if (query) {
-      return getApiUrl(apiPaths.MOVIE_SEARCH, {
-        query: encodeURIComponent(query),
-        page,
-      });
-    }
-    return getApiUrl(apiPaths.MOVIE_POPULAR, { page });
-  })();
+  const fetcher = query ? getMovieSearch : getMovieList;
 
-  const { data, error, isLoading } = useSWR<MovieListResponse>(url, fetcher);
+  const { data, error, isLoading } = useSWR([page, query], fetcher);
 
-  const hasMore = data?.total_pages > page;
-  const transformData = useMemo(() => {
-    if (error || !data) {
-      return [];
-    }
-    return data.results?.map((item) => transformMovie(item)) || [];
-  }, [data, error]);
+  const movieList = data?.movieList;
+  const hasMore = data?.totalPages > page;
 
   if (error) {
     const message = (() => {
@@ -53,17 +24,12 @@ export const useMovieList = (page = 1, query: string | null = null) => {
     });
   }
 
-  return { data: transformData, error, isLoading, hasMore };
+  return { data: movieList, error, isLoading, hasMore };
 };
 
 export const useMovieDetail = (id: number) => {
   const { openToast } = useToast();
-  const urls = [
-    getApiUrl(`${apiPaths.MOVIE}/${id}`),
-    getApiUrl(`${apiPaths.MOVIE}/${id}/credits`),
-    getApiUrl(`${apiPaths.MOVIE}/${id}/videos`),
-  ];
-  const { data, error, isLoading } = useSWR(urls, multiFetcher);
+  const { data, error, isLoading } = useSWR([id], getMovieDetail);
 
   if (!data || error) {
     if (error) {
@@ -76,13 +42,5 @@ export const useMovieDetail = (id: number) => {
     return { data: null, error, isLoading };
   }
 
-  const [movieDetail, movieCredits, movieVideos] =
-    (data as [MovieDetails, Credits, VideoResponse]) || [];
-  const transformData = transformMovieDetail({
-    movie: movieDetail,
-    credits: movieCredits,
-    videos: movieVideos?.results,
-  });
-
-  return { data: transformData, error, isLoading };
+  return { data, error, isLoading };
 };
