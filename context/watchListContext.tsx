@@ -23,6 +23,7 @@ const WatchListContext = createContext<WatchListContextType>({
 export const WatchListProvider = ({ children }: { children: React.ReactNode }) => {
   const [watchList, setWatchList] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [orderType, setOrderType] = useState<OrderType>(OrderType.popularity);
 
   useEffect(() => {
     const storedWatchList = localStorage.getItem("watchList");
@@ -31,6 +32,11 @@ export const WatchListProvider = ({ children }: { children: React.ReactNode }) =
     }
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    const newList = orderList({order: 'desc', type: orderType, list: watchList});
+    setWatchList(newList);
+  }, [orderType]);
 
   const updateWatchList = (newWatchList: Movie[]) => {
     setWatchList(newWatchList);
@@ -48,8 +54,7 @@ export const WatchListProvider = ({ children }: { children: React.ReactNode }) =
   };
 
   const orderWatchList = (type: OrderType = OrderType.voteAverage) => {
-    const newWatchList = orderList({order: 'desc', type, list: watchList});
-    updateWatchList(newWatchList);
+    setOrderType(type);
   };
 
   return (
