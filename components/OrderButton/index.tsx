@@ -1,20 +1,19 @@
 "use client";
 
-import { useState } from 'react';
 import { OrderType } from '@/constants/type';
 import data from './data';
 
 interface OrderButtonProps {
+  orderType: OrderType;
   onOrderChange: (type: OrderType) => void;
 }
 
 const OrderButton = ({ 
+  orderType,
   onOrderChange, 
 }: OrderButtonProps) => {
-  const [orderType, setOrderType] = useState<OrderType>(OrderType.popularity);
 
   const handleOrderChange = (type: OrderType) => {
-    setOrderType(type);
     onOrderChange(type);
   };
 

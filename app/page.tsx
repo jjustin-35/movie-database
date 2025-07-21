@@ -27,19 +27,14 @@ export default function Home() {
     }
   }, [movieList, isLoading]);
 
-  useEffect(() => {
-    if (allMovieList.length > 0) {
-      const orderedMovieList = orderList({
-        order: "desc",
-        type: orderType,
-        list: allMovieList,
-      });
-      setAllMovieList(orderedMovieList);
-    }
-  }, [orderType]);
-
   const orderMovieList = (type: OrderType) => {
     setOrderType(type);
+    const orderedMovieList = orderList({
+      order: "desc",
+      type,
+      list: allMovieList,
+    });
+    setAllMovieList(orderedMovieList);
   };
 
   const onSubmit = (query: string) => {
@@ -55,7 +50,7 @@ export default function Home() {
         onSubmit={onSubmit}
         placeholder="搜尋電影..."
       />
-      <OrderButton onOrderChange={orderMovieList} />
+      <OrderButton orderType={orderType} onOrderChange={orderMovieList} />
       <Movies
         movieList={allMovieList}
         isLoading={isLoading}

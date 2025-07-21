@@ -1,15 +1,13 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Movie, OrderType } from "@/constants/type";
-import { orderList } from "@/helpers/orderList";
+import { Movie } from "@/constants/type";
 
 interface WatchListContextType {
   watchList: Movie[];
   isLoading: boolean;
   addToWatchList: (movie: Movie) => void;
   removeFromWatchList: (movieId: number) => void;
-  orderWatchList: (type: OrderType) => void;
 }
 
 const WatchListContext = createContext<WatchListContextType>({
@@ -17,26 +15,24 @@ const WatchListContext = createContext<WatchListContextType>({
   isLoading: false,
   addToWatchList: () => {},
   removeFromWatchList: () => {},
-  orderWatchList: () => {},
 });
 
-export const WatchListProvider = ({ children }: { children: React.ReactNode }) => {
+export const WatchListProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [watchList, setWatchList] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [orderType, setOrderType] = useState<OrderType>(OrderType.popularity);
 
   useEffect(() => {
     const storedWatchList = localStorage.getItem("watchList");
     if (storedWatchList) {
-      setWatchList(JSON.parse(storedWatchList));
+      const parsedWatchList = JSON.parse(storedWatchList);
+      setWatchList(parsedWatchList);
     }
     setIsLoading(false);
   }, []);
-
-  useEffect(() => {
-    const newList = orderList({order: 'desc', type: orderType, list: watchList});
-    setWatchList(newList);
-  }, [orderType]);
 
   const updateWatchList = (newWatchList: Movie[]) => {
     setWatchList(newWatchList);
@@ -53,13 +49,9 @@ export const WatchListProvider = ({ children }: { children: React.ReactNode }) =
     updateWatchList(newWatchList);
   };
 
-  const orderWatchList = (type: OrderType = OrderType.voteAverage) => {
-    setOrderType(type);
-  };
-
   return (
     <WatchListContext.Provider
-      value={{ watchList, isLoading, addToWatchList, removeFromWatchList, orderWatchList }}
+      value={{ watchList, isLoading, addToWatchList, removeFromWatchList }}
     >
       {children}
     </WatchListContext.Provider>
