@@ -39,6 +39,7 @@ export const getMovieList = async (page: number) => {
 
 export const getMovieSearch = async (page: number, query: string) => {
   try {
+    console.log("getMovieSearch", page, query);
     const url = getApiUrl(apiPaths.MOVIE_SEARCH, { page, query });
     const response = await fetch(url);
     const data: MovieListResponse = await response.json();

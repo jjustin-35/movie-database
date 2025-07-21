@@ -6,7 +6,7 @@ export const useMovieList = (page = 1, query: string | null = null) => {
   const { openToast } = useToast();
   const fetcher = query ? getMovieSearch : getMovieList;
 
-  const { data, error, isLoading } = useSWR([page, query], fetcher);
+  const { data, error, isLoading } = useSWR([page, query], (params) => fetcher(...params));
 
   const movieList = data?.movieList;
   const hasMore = data?.totalPages > page;
@@ -29,7 +29,7 @@ export const useMovieList = (page = 1, query: string | null = null) => {
 
 export const useMovieDetail = (id: number) => {
   const { openToast } = useToast();
-  const { data, error, isLoading } = useSWR([id], getMovieDetail);
+  const { data, error, isLoading } = useSWR([id], (params) => getMovieDetail(...params));
 
   if (!data || error) {
     if (error) {

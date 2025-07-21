@@ -20,7 +20,9 @@ export const getApiUrl = (
   if (params) {
     if (Object.keys(params).length === 0) return null;
     Object.entries(params).forEach(([key, value]) => {
-      originUrl.searchParams.append(key, value.toString());
+      if (!value) return;
+      const valueString = typeof value === "number" ? value.toString() : value;
+      originUrl.searchParams.append(key, valueString);
     });
   }
   return originUrl.toString();
